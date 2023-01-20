@@ -1,0 +1,24 @@
+const form = document.getElementById('form');
+
+function redirect() {
+	window.location.href = 'exams.html';
+}
+
+form.addEventListener('submit', function(e) {
+	let userName = document.getElementById('prenom').value;
+	let myRegex = /^[a-zA-Z-\s]+$/;
+	// EventListener sur le formulaire. (e) = event handling function that allows to interact with the object (on event, obj)
+
+	if (userName.trim() == "") {
+		e.preventDefault();
+		alert('Le prénom est obligatoire.');
+	} else if (myRegex.test(userName) == false) {
+		alert('Le prénom ne doit contenir que des lettres, espaces et tirets.')
+		e.preventDefault();
+	} else {
+		e.preventDefault();
+		localStorage.setItem('Prénom', userName);
+		var prenom = localStorage.getItem('value');
+		redirect();
+	}
+});
