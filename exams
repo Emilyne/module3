@@ -1,0 +1,52 @@
+// fetch() method: Defined on the window object used to perform a request.
+// fetch() returns a promise.
+// A promise is either fulfilled or rejected.
+
+fetch('https://qcm.alwayslearn.fr/api/examens.json')
+	.then((response) => response.json()) // When a promised gets fulfilled, .then is used + we specify an argument (it will store whatever information is in the argument)
+	// Returns the data and convert it into an object.
+	.then((data) => {
+		// console.log(data)
+		data.forEach((entry) => afficherListe(entry)) // The forEach() method executes a provided function once for each array element.
+
+	});
+
+var content = document.querySelector('#app');
+content.classList.add('exams');
+
+function afficherListe(entry) {
+
+	// Création des éléments
+	let conteneur = document.createElement('div');
+	let paragraphe = document.createElement('p');
+	let bouton = document.createElement('button');
+
+	// Publication des éléments
+	let contenu = document.createTextNode(entry.title);
+	paragraphe.appendChild(contenu);
+
+	conteneur.appendChild(paragraphe);
+	conteneur.appendChild(bouton);
+	content.appendChild(conteneur);
+
+	bouton.textContent = "Lancer l'examen";
+	bouton.id = entry.id;
+
+	// Redirection en fonction de l'ID
+
+	bouton.addEventListener('click', function(event) { // Redirect all to 3
+		switch (entry.id) {
+			case 1:
+				window.location.href = 'https://evdb1.alwaysdata.net/quizz.html?id=1';
+				break;
+			case 2:
+				window.location.href = 'https://evdb1.alwaysdata.net/quizz.html?id=2';
+				break;
+			case 3:
+				window.location.href = 'https://evdb1.alwaysdata.net/quizz.html?id=3';
+				break;
+			default:
+				event.preventDefault();
+		}
+	});
+}
