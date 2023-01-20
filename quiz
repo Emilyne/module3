@@ -1,0 +1,83 @@
+// DISPLAY ACCORDING TO THE QUIZ ID
+
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const id = urlParams.get('id');
+
+// CREATE THE FORM AND THE BUTTON
+
+
+var content = document.querySelector('#app');
+content.classList.add('quiz');
+var form = document.createElement('fieldset');
+content.appendChild(form);
+var button = document.createElement('button');
+
+fetch('https://qcm.alwayslearn.fr/api/examens/' + id)
+	.then(response => response.json())
+	.then(data => {
+
+		console.log(data);
+		displayTitle(data.title);
+
+		data.question.forEach((entry) => {
+
+			questionDiv = document.createElement('div');
+			questionList = document.createElement('legend');
+			questionList.innerHTML = entry.question;
+			form.appendChild(questionDiv);
+			questionDiv.appendChild(questionList);
+
+			Object.values(entry.options).forEach((responses) => {
+				displayOptions(responses, questionDiv, entry.question);
+			});
+		});
+
+		button.innerHTML = 'Valider';
+		form.appendChild(button);
+	});
+
+var displayTitle = (title) => {
+	var h1 = document.querySelector('h1');
+	h1.append(title);
+};
+
+var displayOptions = (responses, label, question) => {
+	var div = document.createElement('div');
+	label.appendChild(div);
+
+	var input = document.createElement('input');
+	input.type = 'radio';
+	input.name = question;
+	input.id = question;
+	input.value = responses.option;
+	input.dataset.correct = responses.isCorrect
+	div.appendChild(input);
+
+	var label = document.createElement('label');
+	label.for = question;
+	label.append(responses.option);
+	div.appendChild(label);
+};
+
+
+
+//  CHECK THE CORRECT ANSWERS AND ASSIGN POINTS IF THE ANSWER IS CORRECT
+var getResults = () => {
+
+	answers = document.getElementsByTagName('input');
+	points = 0;
+	for (var i = 0; i < answers.length; i++) {
+		if (answers[i].checked && answers[i].dataset.correct == "true") {
+			points += 5;
+		}
+	}
+
+	console.log(points);
+	localStorage.setItem('points', points);
+}
+
+button.addEventListener('click', function(event) {
+	getResults();
+	window.location.href = "https://evdb1.alwaysdata.net/result.html";
+});
