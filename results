@@ -1,5 +1,5 @@
 var content = document.querySelector('#app');
 content.classList.add('result');
 var div = document.createElement("div");
-div.innerHTML = "Points : " + localStorage.getItem("points");
+div.innerHTML = "Votre score est de " + localStorage.getItem("points") + " points";
 content.appendChild(div);
